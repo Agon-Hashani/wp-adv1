@@ -6,7 +6,6 @@ function wp_adv_theme_support()
     add_theme_support('post-thumbnails');
 }
 add_action('after_setup_theme', 'wp_adv_theme_support');
-
 function wp_adv_menus()
 {
     $locations = [
@@ -15,9 +14,7 @@ function wp_adv_menus()
     ];
     register_nav_menus($locations);
 }
-
 add_action('init', 'wp_adv_menus');
-
 function wp_adv_register_styles()
 {
     wp_enqueue_style(
@@ -44,7 +41,6 @@ function wp_adv_register_styles()
 }
 
 add_action('wp_enqueue_scripts', 'wp_adv_register_styles');
-
 function wp_adv_register_scripts()
 {
     wp_enqueue_script(
@@ -113,3 +109,32 @@ function wp_adv_nav_menu_item_title($title, $item, $args, $depth)
     return $title;
 }
 add_filter('nav_menu_item_title', 'wp_adv_nav_menu_item_title', 10, 4);
+function wp_adv_nav_menu_item_title($title, $item, $args, $depth){
+    $icon_class = '';
+    foreach ($item->classes as $c) {
+        if (strpos($c, 'fa-') === 0|| strpos($c, 'fab') === 0|| strpos($c, 'fas') === 0|| strpos($c, 'far') === 0)
+            $icon_class = $c;
+            break;
+        }
+    if ($icon_class) {
+        $title = '<i class"'. esc_attr($icon_class) . 'fa-fw mr-2"></i>'. $title;
+    }
+    return $title;
+}
+
+add_filter('nav_menu_item_title', 'wp_adv_nav_menu_item_title',10,4);
+
+function wp_adv_widget_areas(){
+    register_sidebar() {
+        [
+        'name' =>'Sidebar Widget Area',
+        'id'=> 'sidebar-1',
+        'description'=> 'Sidebar Widget Area',
+        'before_wideget'=> '<div class="widget %2$s mb-3">',
+        'after_wideget'=> '</div>',
+        'before_wideget'=> '"<h3 class="widget-title mb-3">',
+        'after_wideget'=> '</h3>',
+        ]
+    };
+}
+add_action('widgets_init','wp_adv_widget_areas');
